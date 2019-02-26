@@ -1,7 +1,10 @@
 # Pleroma Docker
 
-## Setup
+## Build
 
+	$ docker-compose build
+
+## Setup
 	$ cp .env.example .env
 	$ docker-compose pull
 	$ ./setup.sh init
