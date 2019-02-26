@@ -8,7 +8,7 @@ volumes:
 services:
   pleroma:
      build: .
-     image: mamemomonga/pleroma:v0.0.9
+     image: mamemomonga/pleroma:latest
      environment:
        MIX_ENV: prod
      volumes:
