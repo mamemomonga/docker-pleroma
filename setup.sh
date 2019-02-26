@@ -12,7 +12,7 @@ do_init() {
 	CONTAINER_NAME="pleroma-setup-$$"
 
 	# Pleroma
-	# .env $B$G@_Dj$7$?$N4D6-JQ?t$+$i@_Dj%U%!%$%k$r@8@.$5$;$k(B
+	# .env で設定したの環境変数から設定ファイルを生成させる
 	docker run -d --name $CONTAINER_NAME $IMAGE_NAME sh -c 'while true; do sleep 1; done'
 
 	docker exec -i $CONTAINER_NAME su-exec pleroma sh -c "cd /opt/pleroma; mix pleroma.instance gen \
@@ -25,9 +25,9 @@ do_init() {
 	do_config_get
 
 	# PostgreSQL
-	# $B=i4|2=$N$_9T$$$?$$$,!"(Bpostgres$B$r5/F0$7$J$$$H(Bentrypoint$B$,=i4|2=$r9T$o$J$$$?$a!"(B
-	# $B2?$b$7$J$$(B postgres$B$H$7$F(Bbootstraping$B%b!<%I$G5/F0$9$k!#(B
-	# docker-compose$B$K=i4|2=MQ(BSQL$B$r4^$a$?$/$J$$$N$G(B docker run $B$G<B9T(B
+	# 初期化のみ行いたいが、postgresを起動しないとentrypointが初期化を行わないため、
+	# 何もしない postgresとしてbootstrapingモードで起動する。
+	# docker-composeに初期化用SQLを含めたくないので docker run で実行
 	docker run --rm \
 		-v $VOLUME_DB:/var/lib/postgresql/data \
 		-v $BASEDIR/config/setup_db.psql:/docker-entrypoint-initdb.d/setup_db.sql:ro \

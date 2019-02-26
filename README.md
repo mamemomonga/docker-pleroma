@@ -7,6 +7,14 @@
 	$ ./setup.sh init
 	$ docker-compose up
 
+## Get current config
+
+	$ ./setup.sh get
+
+## Put config
+
+	$ ./setup.sh put
+
 ## Reset
 
 	$ docker-compose down; docker volume rm pleroma-config pleroma-db pleroma-upload; rm -rf config
