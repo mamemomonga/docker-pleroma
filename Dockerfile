@@ -6,7 +6,7 @@ RUN set -xe && \
         apk del tzdata && \
         rm -rf /var/cache/apk/*
 
-ENV BRANCH=release-0.9.9
+ENV BRANCH=master
 RUN set -xe && \
         adduser -S -s /bin/false -h /opt/pleroma -H pleroma && \
         mkdir -p /opt/pleroma && \
