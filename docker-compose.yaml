@@ -1,0 +1,27 @@
+version: '3'
+
+volumes:
+   db:     { external: { name: "${VOLUME_DB}" }}
+   upload: { external: { name: "${VOLUME_UPLOAD}" }}
+   config: { external: { name: "${VOLUME_CONFIG}" }}
+
+services:
+  pleroma:
+     build: .
+     image: mamemomonga/pleroma:v0.0.9
+     environment:
+       MIX_ENV: prod
+     volumes:
+       - config:/opt/pleroma/config
+       - upload:/opt/pleroma/upload
+     depends_on:
+       - db
+     ports:
+       - 4000:4000
+
+  db:
+     image: postgres:10.7
+     volumes:
+       - db:/var/lib/postgresql/data
+     env_file: .env
+
