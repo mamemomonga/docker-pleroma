@@ -18,8 +18,8 @@
 
 	$ ./setup.sh put
 
-## Reset
+## Destroy
 
-	$ docker-compose down; docker volume rm pleroma-config pleroma-db pleroma-upload; rm -rf config
+	$ ./setup.sh destroy
 
 https://git.pleroma.social/pleroma/pleroma/wikis/Installing%20on%20Alpine%20Linux

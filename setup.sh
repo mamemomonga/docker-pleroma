@@ -6,23 +6,19 @@ source $BASEDIR/.env
 
 do_init() {
 	docker volume create $VOLUME_CONFIG
+	docker volume create $VOLUME_BUILD
 	docker volume create $VOLUME_UPLOAD
 	docker volume create $VOLUME_DB
 
 	CONTAINER_NAME="pleroma-setup-$$"
 
-	# Pleroma
-	# .env で設定したの環境変数から設定ファイルを生成させる
-	docker run -d --name $CONTAINER_NAME $IMAGE_NAME sh -c 'while true; do sleep 1; done'
-
-	docker exec -i $CONTAINER_NAME su-exec pleroma sh -c "cd /opt/pleroma; mix pleroma.instance gen \
+	# Pleroma初期設定とconfigとbuildキャッシュのコピー
+	docker run --rm \
+		-v $VOLUME_CONFIG:/mnt/config \
+		-v $VOLUME_BUILD:/mnt/_build \
+		$IMAGE_NAME instance_gen \
 		--domain $DOMAIN --instance-name $INSTANCE_NAME --admin-email $ADMIN_EMAIL \
-		--dbhost $DBHOST --dbname $DBNAME --dbuser $DBUSER --dbpass $DBPASS"
-
-	docker exec $CONTAINER_NAME su-exec pleroma tar zcC /opt/pleroma/config . | docker run --rm -i -v $VOLUME_CONFIG:/config busybox tar zxvpC /config
-	docker rm -f $CONTAINER_NAME
-
-	do_config_get
+		--dbhost $DBHOST --dbname $DBNAME --dbuser $DBUSER --dbpass $DBPASS
 
 	# PostgreSQL
 	# 初期化のみ行いたいが、postgresを起動しないとentrypointが初期化を行わないため、
@@ -36,11 +32,19 @@ do_init() {
 
 	mv config/{generated_config.exs,prod.secret.exs}
 
-	do_config_put
-
 	docker-compose up -d db
-	docker-compose run --rm pleroma sh -c 'mix local.rebar --force; mix local.hex --force; mix ecto.migrate'
+	docker-compose run --rm pleroma migrate
 	docker-compose down
+
+	do_config_get
+}
+
+do_destroy() {
+	docker-compose down
+	docker volume rm $VOLUME_CONFIG
+	docker volume rm $VOLUME_BUILD
+	docker volume rm $VOLUME_UPLOAD
+	docker volume rm $VOLUME_DB
 }
 
 do_config_get() {
@@ -71,6 +75,7 @@ case "${1:-}" in
 	"init" ) do_init ;;
 	"get" )  do_config_get ;;
 	"put" )  do_config_put ;;
+	"destroy") do_destroy ;;
 	* )      usage ;;
 esac
 

@@ -2,8 +2,9 @@ version: '3'
 
 volumes:
    db:     { external: { name: "${VOLUME_DB}" }}
-   upload: { external: { name: "${VOLUME_UPLOAD}" }}
    config: { external: { name: "${VOLUME_CONFIG}" }}
+   upload: { external: { name: "${VOLUME_UPLOAD}" }}
+   build:  { external: { name: "${VOLUME_BUILD}" }}
 
 services:
   pleroma:
@@ -14,10 +15,13 @@ services:
      volumes:
        - config:/opt/pleroma/config
        - upload:/opt/pleroma/upload
+       - build:/opt/pleroma/_build
      depends_on:
        - db
      ports:
        - 4000:4000
+     command:
+       - server
 
   db:
      image: postgres:10.7
