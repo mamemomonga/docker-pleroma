@@ -20,6 +20,8 @@ do_init() {
 		--domain $DOMAIN --instance-name $INSTANCE_NAME --admin-email $ADMIN_EMAIL \
 		--dbhost $DBHOST --dbname $DBNAME --dbuser $DBUSER --dbpass $DBPASS
 
+	do_config_get
+
 	# PostgreSQL
 	# 初期化のみ行いたいが、postgresを起動しないとentrypointが初期化を行わないため、
 	# 何もしない postgresとしてbootstrapingモードで起動する。
@@ -31,12 +33,12 @@ do_init() {
 		postgres:10.7 postgres --boot
 
 	mv config/{generated_config.exs,prod.secret.exs}
+	do_config_put
 
 	docker-compose up -d db
 	docker-compose run --rm pleroma migrate
 	docker-compose down
 
-	do_config_get
 }
 
 do_destroy() {
