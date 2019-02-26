@@ -22,4 +22,6 @@
 
 	$ ./setup.sh destroy
 
-https://git.pleroma.social/pleroma/pleroma/wikis/Installing%20on%20Alpine%20Linux
+
+* https://hub.docker.com/r/mamemomonga/pleroma
+* https://git.pleroma.social/pleroma/pleroma/wikis/Installing%20on%20Alpine%20Linux
