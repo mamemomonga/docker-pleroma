@@ -40,11 +40,11 @@ do_init() {
 }
 
 do_destroy() {
-	docker-compose down
-	docker volume rm $VOLUME_CONFIG
-	docker volume rm $VOLUME_BUILD
-	docker volume rm $VOLUME_UPLOAD
-	docker volume rm $VOLUME_DB
+	docker-compose down || true
+	docker volume rm $VOLUME_CONFIG || true
+	docker volume rm $VOLUME_BUILD || true
+	docker volume rm $VOLUME_UPLOAD || true
+	docker volume rm $VOLUME_DB || true
 }
 
 do_config_get() {
@@ -65,6 +65,7 @@ usage() {
 	echo "USAGE: $0 COMMAND"
 	echo "COMMANDS:"
 	echo "  init"
+	echo "  destroy"
 	echo "  get"
 	echo "  put"
 	exit 1
