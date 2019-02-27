@@ -1,10 +1,10 @@
 version: '3'
 
 volumes:
-   db:     { external: { name: "${VOLUME_DB}" }}
-   config: { external: { name: "${VOLUME_CONFIG}" }}
-   upload: { external: { name: "${VOLUME_UPLOAD}" }}
-   build:  { external: { name: "${VOLUME_BUILD}" }}
+   db:      { external: { name: "${VOLUME_DB}" }}
+   config:  { external: { name: "${VOLUME_CONFIG}" }}
+   uploads: { external: { name: "${VOLUME_UPLOADS}" }}
+   build:   { external: { name: "${VOLUME_BUILD}" }}
 
 services:
   pleroma:
@@ -14,7 +14,7 @@ services:
        MIX_ENV: prod
      volumes:
        - config:/opt/pleroma/config
-       - upload:/opt/pleroma/upload
+       - uploads:/opt/pleroma/uploads
        - build:/opt/pleroma/_build
      depends_on:
        - db

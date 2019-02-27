@@ -7,7 +7,7 @@ source $BASEDIR/.env
 do_init() {
 	docker volume create $VOLUME_CONFIG
 	docker volume create $VOLUME_BUILD
-	docker volume create $VOLUME_UPLOAD
+	docker volume create $VOLUME_UPLOADS
 	docker volume create $VOLUME_DB
 
 	CONTAINER_NAME="pleroma-setup-$$"
@@ -45,7 +45,7 @@ do_destroy() {
 	docker-compose down || true
 	docker volume rm $VOLUME_CONFIG || true
 	docker volume rm $VOLUME_BUILD || true
-	docker volume rm $VOLUME_UPLOAD || true
+	docker volume rm $VOLUME_UPLOADS || true
 	docker volume rm $VOLUME_DB || true
 }
 
