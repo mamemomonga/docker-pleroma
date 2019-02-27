@@ -1,11 +1,11 @@
 # Pleroma Docker
 
-## Build
-
-	$ docker-compose build
-
 ## Setup
+
+	$ git clone https://github.com/mamemomonga/docker-pleroma.git
+	$ cd docker-pleroma
 	$ cp .env.example .env
+	$ vim .env
 	$ docker-compose pull
 	$ ./setup.sh init
 	$ docker-compose up
