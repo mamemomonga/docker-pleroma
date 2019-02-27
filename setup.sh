@@ -1,8 +1,8 @@
 #!/bin/bash
 set -eu
 BASEDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )"  && pwd )"
-source $BASEDIR/.env
 
+eval $(cat $BASEDIR/.env | perl -nlpE 's/^(.+)=(.+)$/$1="$2"/g')
 
 do_init() {
 	docker volume create $VOLUME_CONFIG
@@ -16,9 +16,8 @@ do_init() {
 	docker run --rm \
 		-v $VOLUME_CONFIG:/mnt/config \
 		-v $VOLUME_BUILD:/mnt/_build \
-		$IMAGE_NAME instance_gen \
-		--domain $DOMAIN --instance-name $INSTANCE_NAME --admin-email $ADMIN_EMAIL \
-		--dbhost $DBHOST --dbname $DBNAME --dbuser $DBUSER --dbpass $DBPASS
+		--env-file $BASEDIR/.env \
+		$IMAGE_NAME instance_gen
 
 	do_config_get
 

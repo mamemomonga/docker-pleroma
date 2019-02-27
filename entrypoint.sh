@@ -20,12 +20,15 @@ case "${1:-}" in
 		;;
 
 	"instance_gen")
-		shift
 		su-exec pleroma mix local.rebar --force
 		su-exec pleroma mix local.hex --force
-		su-exec pleroma mix pleroma.instance gen $@
-		tar cC /opt/pleroma/config . | tar xvpC /mnt/config
-		tar cC /opt/pleroma/_build . | tar xvpC /mnt/_build
+
+		su-exec pleroma mix pleroma.instance gen \
+			--domain $DOMAIN --instance-name "$INSTANCE_NAME" --admin-email $ADMIN_EMAIL \
+			--dbhost $DBHOST --dbname $DBNAME --dbuser $DBUSER --dbpass $DBPASS
+
+		tar cC /opt/pleroma/config . | tar xpC /mnt/config
+		tar cC /opt/pleroma/_build . | tar xpC /mnt/_build
 		;;
 
 	* )
